@@ -1,0 +1,217 @@
+﻿<UserControl x:Class="PivotViewerXaml.MainPage"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            mc:Ignorable="d"
+            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+	        xmlns:il="clr-namespace:Microsoft.Expression.Interactivity.Layout;assembly=Microsoft.Expression.Interactions"
+	        xmlns:ic="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+	        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
+	        xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+	        xmlns:local="clr-namespace:PivotViewerXaml"
+	        d:DesignHeight="300" d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <local:CurrencyCodeToColourConverter x:Key="CurrencyCodeToColourConverter"/>
+        <DataTemplate x:Key="TradeItemTemplate">
+
+            <Border Background="{Binding Currency.Code, Mode=OneTime, Converter={StaticResource CurrencyCodeToColourConverter}}"
+                    CornerRadius="5">
+                <Grid Width="200" Height="100">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Underlying}"
+                           FontSize="22"
+                           FontFamily="Segoe UI"
+                           Foreground="Black"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextOptions.TextHintingMode="Animated" 
+                           Grid.ColumnSpan="3"/>
+
+
+                <TextBlock Text="{Binding DealDate, Mode=OneTime, StringFormat=dd.MM.yyy}"
+                         FontSize="12"
+                         FontFamily="Segoe UI"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                           Grid.Row="1"
+                         Grid.ColumnSpan="3"
+                         Foreground="Black"
+                         TextOptions.TextHintingMode="Animated" />
+
+                <TextBlock Text="{Binding Sector, Mode=OneTime}"
+                         FontSize="12"
+                         FontFamily="Segoe UI"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                         Grid.Row="2"
+                         Grid.ColumnSpan="2"
+                         Margin="20,0,0,20"
+                         Foreground="Black"
+                         TextOptions.TextHintingMode="Animated" />
+
+                <TextBlock Text="{Binding Currency.Code, Mode=OneTime}"
+                         FontSize="12"
+                         FontFamily="Segoe UI"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Center"
+                         Grid.Row="2"
+                         Grid.Column="1"
+                         Grid.ColumnSpan="2"
+                         Margin="0,0,20,20"
+                         Foreground="Black"
+                         TextOptions.TextHintingMode="Animated" />
+            </Grid>
+            </Border>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
+            <toolkit:WrapPanel ItemHeight="100"
+                               ItemWidth="200"
+                               Orientation="Horizontal">
+                <i:Interaction.Behaviors>
+                    <il:FluidMoveBehavior AppliesTo="Children" Duration="0:0:0.5" Tag="DataContext">
+                        <il:FluidMoveBehavior.EaseY>
+                            <BackEase EasingMode="EaseInOut" Amplitude="0.1"/>
+                        </il:FluidMoveBehavior.EaseY>
+                        <il:FluidMoveBehavior.EaseX>
+                            <BackEase EasingMode="EaseInOut" Amplitude="0.1"/>
+                        </il:FluidMoveBehavior.EaseX>
+                    </il:FluidMoveBehavior>
+                </i:Interaction.Behaviors>
+            </toolkit:WrapPanel>
+        </ItemsPanelTemplate>
+
+        <ItemsPanelTemplate x:Key="StackPanelTemplate">
+            <StackPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+
+        <ItemsPanelTemplate x:Key="WrapPanelTemplate">
+            <toolkit:WrapPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+
+        <Style x:Key="ListBoxItemStyle1" TargetType="ListBoxItem">
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Grid x:Name="grid" Background="{TemplateBinding Background}">
+                            <VisualStateManager.CustomVisualStateManager>
+                                <ic:ExtendedVisualStateManager/>
+                            </VisualStateManager.CustomVisualStateManager>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="LayoutStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition GeneratedDuration="0:0:0.5">
+                                            <ic:ExtendedVisualStateManager.TransitionEffect>
+                                                <ee:SlideInTransitionEffect/>
+                                            </ic:ExtendedVisualStateManager.TransitionEffect>
+                                        </VisualTransition>
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState x:Name="BeforeLoaded">
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="AfterLoaded"/>
+                                    <VisualState x:Name="BeforeUnloaded">
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter x:Name="contentPresenter" 
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ListBoxStyle1" TargetType="ListBox">
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="Foreground" Value="#FFCACACA"/>
+            <Setter Property="Background" Value="#00333333"/>
+            <Setter Property="ItemTemplate" Value="{StaticResource TradeItemTemplate}"/>
+            <Setter Property="ItemsPanel" Value="{StaticResource ItemsPanelTemplate1}"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource ListBoxItemStyle1}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="BorderThickness" Value="0"></Setter>
+            <Setter Property="Width" Value="200"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource ListBoxStyle1}"  TargetType="ListBox"/>
+        <local:ZeroToCollapsedConverter x:Key="ZeroToCollapsedConverter"/>
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="800"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Margin="20,8,0,0" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="32" Foreground="#FF393939" HorizontalAlignment="Left" d:LayoutOverrides="GridBox" Text="Animating Trades" Grid.ColumnSpan="2"/>
+
+        <ItemsControl ItemsSource="{Binding GroupsWithData}" Grid.Row="1" Grid.Column="0" ItemsPanel="{StaticResource WrapPanelTemplate}" VerticalAlignment="Bottom">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel VerticalAlignment="Bottom" Visibility="{Binding Data.Count, Converter={StaticResource ZeroToCollapsedConverter}}">
+                        <ListBox ItemsSource="{Binding Data}" VerticalContentAlignment="Bottom" />
+                        <TextBlock Text="{Binding Group.Label}" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <Grid
+            x:Name="DebugRoot" Background="White" Grid.Column="1" Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Width="300">
+                    <TextBlock Text="Filter" />
+                    <ItemsControl ItemsSource="{Binding Filters}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Description}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel Width="200">
+                    <TextBlock Text="GroupsByProperty: " />
+                    <TextBlock x:Name="GroupByProperty"/>
+                    <Button x:Name="AddFilterForLastSevenDays" Click="AddFilterForLastSevenDays_OnClick">Add Filter for last 7 days</Button>
+                    <Button x:Name="AddFilterForChfOrUsd" Click="AddFilterForChfOrUsd_OnClick">Add Filter for CHF or USD</Button>
+                    <Button x:Name="ApplyFilter" Click="ApplyFilter_OnClick">Apply Filter</Button>
+                    <Button x:Name="ClearFilter" Click="ClearFilter_OnClick">Clear Filter</Button>
+                    <Button x:Name="ChangeGroupingProperty" Click="ChangeGroupingProperty_OnClick">Change Grouping</Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
